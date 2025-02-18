@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router";
 
-const Product = () => {
+const Product = ({ products }) => {
   return (
     <div>
       <div className="relative font-Nunito  flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
@@ -12,7 +12,11 @@ const Product = () => {
           >
             <img
               className="object-cover"
-              src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8c25lYWtlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
+              src={
+                products
+                  ? products.image[0]
+                  : "https://cdn.britannica.com/73/161473-050-288FF57E/Tigers-water-swimmers.jpg?w=400&h=300&c=crop"
+              }
               alt="product image"
             />
             <span className="absolute top-0 left-0 m-2 rounded-full bg-black px-2 text-center text-sm font-medium text-white">
@@ -24,14 +28,18 @@ const Product = () => {
           <Link to="">
             <a>
               <h5 className="text-xl tracking-tight font-bold text-slate-900">
-                Nike Air MX Super 2500 - Red
+                {products ? products.name : "Bengal-tiger"}
               </h5>
             </a>
           </Link>
           <div className="mt-2 mb-5 flex items-center justify-between">
             <p>
-              <span className="text-2xl font-bold text-slate-900">$449</span>
-              <span className="text-sm text-slate-900 line-through">$699</span>
+              <span className="text-2xl font-bold text-slate-900">
+                {products ? products.price : "5000"}
+              </span>
+              <span className="text-sm text-slate-900 line-through">
+                {products ? products.discountprice : "6000"}
+              </span>
             </p>
             <div className="flex items-center">
               <svg

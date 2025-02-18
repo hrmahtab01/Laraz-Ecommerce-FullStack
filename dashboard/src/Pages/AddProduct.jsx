@@ -32,7 +32,7 @@ const AddProduct = () => {
     formdata.append("discountprice", discountprice);
 
     const product = axios
-      .post("http://localhost:4000/api/v1/product/createproduct", formdata, {
+      .post("http://localhost:5000/api/v1/product/createproduct", formdata, {
         withCredentials: true,
         headers: {
           "Content-Type": "multipart/form-data",
@@ -79,7 +79,7 @@ const AddProduct = () => {
     const allcate = async () => {
       try {
         const { data } = await axios.get(
-          "http://localhost:4000/api/v1/category/allcategory"
+          "http://localhost:5000/api/v1/category/allcategory"
         );
         setallcategorys(data.data);
       } catch (error) {

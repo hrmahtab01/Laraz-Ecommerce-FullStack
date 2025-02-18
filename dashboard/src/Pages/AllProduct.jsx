@@ -31,7 +31,7 @@ export default function AllProduct() {
     const fetchProducts = async () => {
       try {
         const result = await axios.get(
-          "http://localhost:4000/api/v1/product/allproduct"
+          "http://localhost:5000/api/v1/product/allproduct"
         );
         setAllProduct(result.data.data || []); // Ensure 'data' exists
       } catch (error) {
@@ -95,7 +95,7 @@ export default function AllProduct() {
                     <td className={classes}>
                       <div className="flex items-center gap-3">
                         <Avatar
-                          src={item.image}
+                          src={item.image[0]}
                           alt={item.name || "Product Image"}
                           size="md"
                           className="border border-blue-gray-50 bg-blue-gray-50/50 object-contain p-1"
@@ -126,7 +126,7 @@ export default function AllProduct() {
                         color="blue-gray"
                         className="font-normal"
                       >
-                        ${item.sellingprice || "N/A"}
+                        BDT {item.sellingprice || "N/A"}
                       </Typography>
                     </td>
                     <td className={classes}>

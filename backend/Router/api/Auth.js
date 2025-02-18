@@ -9,10 +9,10 @@ const {
 const getusermiddleware = require("../../Middleware/getusermiddleware");
 const router = express.Router();
 
-router.post("/registetion", registetionController);
+router.post("/signup", registetionController);
 router.post("/login", LoginController);
-router.post("/otp-verify" , otpVerifyController)
-router.post("/resend-otp" , resendOtpController)
+router.patch("/otp-verify" , otpVerifyController)
+router.patch("/resend-otp" , resendOtpController)
 router.get("/alluser", getusermiddleware, (req, res) => {
     res.send("all user");
 });

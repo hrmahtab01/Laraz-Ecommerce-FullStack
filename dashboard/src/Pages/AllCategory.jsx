@@ -17,7 +17,7 @@ const Categories = () => {
     const allcate = async () => {
       try {
         const { data } = await axios.get(
-          "http://localhost:4000/api/v1/category/allcategory"
+          "http://localhost:5000/api/v1/category/allcategory"
         );
         Setallcategory(data.data);
       } catch (error) {
@@ -32,7 +32,7 @@ const Categories = () => {
     const token = Cookies.get("token");
     try {
       await axios.delete(
-        `http://localhost:4000/api/v1/category/deletecategory/${id}`,
+        `http://localhost:5000/api/v1/category/deletecategory/${id}`,
         {
           withCredentials: true,
           headers: { Cookie: `token=${token}` },
@@ -107,7 +107,7 @@ const Categories = () => {
   };
 
   return (
-    <div className="container mx-auto p-6">
+    <div className=" p-6">
       <ToastContainer
         position="top-right"
         autoClose={3000}
@@ -119,12 +119,12 @@ const Categories = () => {
         transition={Bounce}
       />
 
-      <h1 className="text-3xl font-bold mb-8 text-center">Categories</h1>
+      <h1 className="text-3xl font-bold mb-8 text-center text-teal-500">Categories</h1>
 
       {loading ? (
         <p className="text-center text-gray-600">Loading categories...</p>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
           {allcategory.map((category) => (
             <div
               key={category._id}

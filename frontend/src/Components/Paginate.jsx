@@ -4,11 +4,9 @@ import ReactPaginate from "react-paginate";
 import Product from "./Product";
 
 // Example items, to simulate fetching from another resources.
-const items = [
-  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
-];
 
-function Paginate({ itemsPerPage }) {
+function Paginate({ itemsPerPage ,allproduct}) {
+  const items = allproduct;
   function Items({ currentItems }) {
     return (
       <>
@@ -16,7 +14,7 @@ function Paginate({ itemsPerPage }) {
           currentItems.map((item) => (
             <>
               <div>
-                <Product />
+                <Product products={item} />
               </div>
             </>
           ))}

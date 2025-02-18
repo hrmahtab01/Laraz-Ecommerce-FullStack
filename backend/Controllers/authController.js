@@ -4,31 +4,33 @@ const userModel = require("../Model/userModel");
 const bcrypt = require("bcrypt");
 const Sendemail = require("../helpers/SendEmalil");
 jwt = require("jsonwebtoken");
-const otp = require("../helpers/Otpgenerator");
+const otpvalue = require("../helpers/Otpgenerator");
+
 
 // Signup
 async function registetionController(req, res) {
   const { name, email, password } = req.body;
-  try {
-    if (!name || !email || !password) {
-      return res.status(400).send({ error: "All fields are required" });
-    }
 
-    if (!emailValidationCheck(email)) {
-      return res.status(400).send({ error: "Invalid email" });
-    }
+  if (!name || !email || !password) {
+    return res.status(400).send({ error: "All fields are required" });
+  }
+  if (!emailValidationCheck(email)) {
+    return res.status(400).send({ error: "Invalid email" });
+  }
+  try {
+
 
     const userExist = await userModel.findOne({ email });
     if (userExist) {
       return res.status(409).send({ error: "User already exist" });
     }
-    bcrypt.hash(password, 10, async function (err, hash) {
+    bcrypt.hash(password, 10,  async function (err, hash) {
       if (err) {
         return res.status(400).send({ error: err });
       }
 
-      let user = new userModel({ name, email, password: hash });
-      await user.save();
+      let user = await userModel.create({ name, email, password: hash });
+      
       Sendemail(email);
       await userModel.findOneAndUpdate(
         { email },
@@ -42,10 +44,10 @@ async function registetionController(req, res) {
           { new: true }
         );
       }, 120000);
-      res.status(201).send({ message: "user registered successfully", user });
+      res.status(201).send({ success:true, message: "user registered successfully", data:user });
     });
   } catch (error) {
-    return res.status(500).send({ error: error.message });
+    return res.status(500).send({ success: false, error: error.message });
   }
 }
 
@@ -117,7 +119,7 @@ async function resendOtpController(req, res) {
   const { email } = req.body;
   const exitinguser = await userModel.findOne({ email });
   if (exitinguser) {
-    exitinguser.otp = otp;
+    exitinguser.otp = otpvalue;
     await exitinguser.save();
     Sendemail(email);
     setTimeout(async () => {
@@ -138,3 +140,4 @@ module.exports = {
   otpVerifyController,
   resendOtpController,
 };
+
