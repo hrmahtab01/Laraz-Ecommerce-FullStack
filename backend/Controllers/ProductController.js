@@ -4,10 +4,19 @@ const path = require("path");
 const categoryModel = require("../Model/categoryModel");
 const StoreModel = require("../Model/storeModel");
 const { error } = require("console");
+const { env } = require("process");
 
 async function createproductController(req, res) {
-  const { name, description, sellingprice, discountprice, category, store , stock } =
-    req.body;
+  const {
+    name,
+    description,
+    sellingprice,
+    discountprice,
+    category,
+    store,
+    stock,
+    isfeature,
+  } = req.body;
 
   const image = req.files ? req.files.map((img) => img.filename) : [];
 
@@ -26,6 +35,8 @@ async function createproductController(req, res) {
       discountprice,
       category,
       stock,
+      isfeature,
+      store,
       image: image.map((img) => process.env.host_url + img),
     });
 
@@ -109,8 +120,149 @@ async function getallProductController(req, res) {
   }
 }
 
+async function isfeaturedController(req, res) {
+  const { id } = req.params;
+
+  try {
+    const isfeature = await productModel.findOne({ _id: id });
+    if (!isfeature) {
+      return res
+        .status(404)
+        .send({ success: false, message: "product not found" });
+    }
+    isfeature.isfeature = true;
+    await isfeature.save();
+
+    return res.status(200).send({
+      success: true,
+      message: "product isfeature true successfully",
+      data: isfeature,
+    });
+  } catch (error) {
+    return res.status(500).send({
+      success: false,
+      message: error.message || "something went wrong",
+    });
+  }
+}
+async function getfeatureproduct(req, res) {
+  try {
+    const isfeature = await productModel.find({ isfeature: true });
+    if (!isfeature) {
+      return res
+        .status(404)
+        .send({ success: false, message: "product not found" });
+    }
+    return res.status(200).send({
+      success: true,
+      message: "features product get successfully",
+      data: isfeature,
+    });
+  } catch (error) {
+    return res.status(500).send({
+      success: false,
+      message: error.message || "something went wrong",
+    });
+  }
+}
+
+async function getsingleproductController(req, res) {
+  const { id } = req.params;
+
+  try {
+    const singleproduct = await productModel.findOne({ _id: id });
+
+    if (!singleproduct) {
+      return res
+        .status(404)
+        .send({ success: false, message: "product not found" });
+    }
+    return res.status(200).send({
+      success: true,
+      message: "get single product successfully",
+      data: singleproduct,
+    });
+  } catch (error) {
+    return res.status(500).send({
+      success: false,
+      message: error.message || "something went wronh",
+    });
+  }
+}
+
+async function updateProductController(req, res) {
+  const { id } = req.params;
+  const {
+    name,
+    description,
+    sellingprice,
+    discountprice,
+    category,
+    store,
+    stock,
+    isfeature,
+  } = req.body;
+
+  const newImages = req.files ? req.files.map((img) => img.filename) : [];
+
+  try {
+  
+    const product = await productModel.findById(id);
+    if (!product) {
+      return res.status(404).send({ success: false, message: "Product not found" });
+    }
+
+   
+    if (newImages.length > 0 && product.image) {
+      await Promise.all(
+        product.image.map(async (img) => {
+          try {
+            let imagePath = path.join(__dirname, "../uploads", img.split("/").pop());
+            await fs.promises.unlink(imagePath); 
+          } catch (error) {
+            console.error("Error deleting file:", error.message);
+          }
+        })
+      );
+    }
+
+   
+    const updatedProduct = await productModel.findByIdAndUpdate(
+      id,
+      {
+        name,
+        description,
+        sellingprice,
+        discountprice,
+        category,
+        stock,
+        isfeature,
+        store,
+        image: newImages.length > 0 ? newImages.map((img) => process.env.host_url + img) : product.image,
+      },
+      { new: true }
+    );
+
+    return res.status(200).send({
+      success: true,
+      message: "Product updated successfully",
+      data: updatedProduct,
+    });
+  } catch (error) {
+    console.error("Update Product Error:", error);
+    return res.status(500).send({
+      success: false,
+      message: error.message || "Something went wrong",
+    });
+  }
+}
+
 module.exports = {
   createproductController,
   deleteproductController,
   getallProductController,
+  isfeaturedController,
+  getfeatureproduct,
+  getsingleproductController,
+  updateProductController,
 };

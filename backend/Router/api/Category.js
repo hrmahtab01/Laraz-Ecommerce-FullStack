@@ -9,6 +9,7 @@ const {
 const multer = require("multer");
 const { route } = require("./Auth");
 const getusermiddleware = require("../../Middleware/getusermiddleware");
+const Checkadminmiddleware = require("../../Middleware/CheckAdminmiddleware");
 const router = express.Router();
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -44,21 +45,21 @@ function errorCheck(error, req, res, next) {
 
 router.post(
   "/createcategory",
-  getusermiddleware,
+  Checkadminmiddleware,
   upload.single("image"),
   errorCheck,
   CreatecategoryController
 );
 router.delete(
   "/deletecategory/:id",
-  getusermiddleware,
+  Checkadminmiddleware,
   deletecategoryController
 );
 router.get("/allcategory", allcategoryController);
 router.get("/singlecategory/:id", getsinglecategoryController);
 router.patch(
   "/updatecategory/:id",
-  getusermiddleware,
+  Checkadminmiddleware,
   upload.single("image"),
   errorCheck,
   updatecategoryController

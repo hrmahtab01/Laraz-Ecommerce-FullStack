@@ -14,6 +14,10 @@ const productSchema = mongoose.Schema(
       type: Array,
       required: true,
     },
+    isfeature: {
+      type: Boolean,
+      default: false,
+    },
     sellingprice: {
       type: Number,
       required: true,

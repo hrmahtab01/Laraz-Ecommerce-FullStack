@@ -3,6 +3,22 @@ import axios from "axios";
 
 const ShopSidebar = () => {
   const [allcategory, Setallcategory] = useState([]);
+  const [allproduct, Setallproduct] = useState([]);
+  const [maxvalue, setMaxvalue] = useState();
+
+  const fetchallproduct = () => {
+    axios
+      .get("http://localhost:5000/api/v1/product/allproduct")
+      .then((Response) => {
+        Setallproduct(Response.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  useEffect(() => {
+    fetchallproduct();
+  }, []);
 
   const fetchallcategory = () => {
     axios
@@ -18,6 +34,15 @@ const ShopSidebar = () => {
   useEffect(() => {
     fetchallcategory();
   }, []);
+
+  const HandlefilterPrice = (e) => {
+    setMaxvalue(e.target.value);
+    const filtered = allproduct.filter(
+      (item) => item.sellingprice >= 0 && item.sellingprice <= maxvalue
+    );
+    console.log(filtered);
+    
+  };
   return (
     <div>
       <div className="rounded-md shadow-md shadow-gray-400 p-3">
@@ -41,12 +66,15 @@ const ShopSidebar = () => {
         <h2 className="mb-3 text-xl font-bold font-Nunito text-primary">
           Price Filter
         </h2>
+        <label className="text-gray-600 font-Nunito font-semibold ">Price Range - <span className="text-primary">{maxvalue}</span></label>
         <input
+          onChange={HandlefilterPrice}
           className="w-full"
           color={"teal"}
           type="range"
-          min={500}
-          max={5000}
+          min={0}
+          max={100000}
+          defaultValue={100000}
         />
       </div>
     </div>

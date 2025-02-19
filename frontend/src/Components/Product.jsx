@@ -35,7 +35,7 @@ const Product = ({ products }) => {
           <div className="mt-2 mb-5 flex items-center justify-between">
             <p>
               <span className="text-2xl font-bold text-slate-900">
-                {products ? products.price : "5000"}
+                {products ? products.sellingprice : "5000"}
               </span>
               <span className="text-sm text-slate-900 line-through">
                 {products ? products.discountprice : "6000"}

@@ -107,7 +107,10 @@ async function updatecategoryController(req, res) {
   const { filename } = req.file;
 
   try {
-    const exitcategory = await categoryModel.findOne({ _id: id });
+    const exitcategory = await categoryModel.findOne(
+      { _id: id },
+     
+    );
     if (!exitcategory) {
       return res
         .status(404)
@@ -128,16 +131,11 @@ async function updatecategoryController(req, res) {
     );
 
     const category = await categoryModel.findOneAndUpdate(
-      {
-        _id: id,
-      },
-      {
-        name,
-        description,
-        image: process.env.host_url + filename,
-      },
+      { _id: id },
+      { name, description, image: process.env.host_url + filename },
       { new: true }
     );
+
     return res.status(200).send({
       success: true,
       message: "category created successfully",

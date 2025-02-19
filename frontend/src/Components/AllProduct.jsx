@@ -19,6 +19,7 @@ const AllProduct = () => {
         Setloader(false);
       });
   };
+console.log(allproduct);
 
   useEffect(() => {
     fetchallproduct();

@@ -6,9 +6,7 @@ const Sendemail = require("../helpers/SendEmalil");
 jwt = require("jsonwebtoken");
 const otpvalue = require("../helpers/Otpgenerator");
 
-
-// Signup
-async function registetionController(req, res) {
+async function registrationController(req, res) {
   const { name, email, password } = req.body;
 
   if (!name || !email || !password) {
@@ -18,19 +16,17 @@ async function registetionController(req, res) {
     return res.status(400).send({ error: "Invalid email" });
   }
   try {
-
-
     const userExist = await userModel.findOne({ email });
     if (userExist) {
       return res.status(409).send({ error: "User already exist" });
     }
-    bcrypt.hash(password, 10,  async function (err, hash) {
+    bcrypt.hash(password, 10, async function (err, hash) {
       if (err) {
         return res.status(400).send({ error: err });
       }
 
       let user = await userModel.create({ name, email, password: hash });
-      
+
       Sendemail(email);
       await userModel.findOneAndUpdate(
         { email },
@@ -44,7 +40,13 @@ async function registetionController(req, res) {
           { new: true }
         );
       }, 120000);
-      res.status(201).send({ success:true, message: "user registered successfully", data:user });
+      res
+        .status(201)
+        .send({
+          success: true,
+          message: "user registered successfully",
+          data: user,
+        });
     });
   } catch (error) {
     return res.status(500).send({ success: false, error: error.message });
@@ -135,9 +137,8 @@ async function resendOtpController(req, res) {
 }
 
 module.exports = {
-  registetionController,
+  registrationController,
   LoginController,
   otpVerifyController,
   resendOtpController,
 };
-
