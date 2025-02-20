@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router";
+import { Link, Navigate, useNavigate } from "react-router";
 import axios from "axios";
 
 const Product = ({ products }) => {
@@ -9,9 +9,9 @@ const Product = ({ products }) => {
 
   const Handleaddtocart = (item) => {
     if (!data) {
-      naviagate("/signup");
+      // naviagate("/signup");
 
-      //  return alert("Please Login fast and then add to cart ")
+      return alert("Please Login fast and then add to cart ");
     } else {
       axios
         .post("http://localhost:5000/api/v1/cart/addtocart", {
@@ -21,7 +21,6 @@ const Product = ({ products }) => {
         .then((result) => {
           naviagate("/cart");
           console.log(result);
-          
         })
         .catch((error) => {
           console.log(error);
@@ -29,10 +28,14 @@ const Product = ({ products }) => {
     }
   };
 
+  const HandleProductdetails = (item) => {
+   naviagate(`/productdetails/${item}`)
+  };
+
   return (
-    <div>
+    <div onClick={() => HandleProductdetails(products._id)}>
       <div className="relative font-Nunito  flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
-        <Link to="productdetails">
+        <Link to="">
           <a
             className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl"
             href="#"

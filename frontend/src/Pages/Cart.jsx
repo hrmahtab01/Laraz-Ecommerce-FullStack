@@ -5,6 +5,7 @@ import Container from "../Layout/Container";
 import { Link } from "react-router";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { MdDelete } from "react-icons/md";
 
 const Cart = () => {
   const [increment, setIncrement] = useState(1);
@@ -14,18 +15,10 @@ const Cart = () => {
   const [allcartitem, setAllcartitem] = useState([]);
   const data = useSelector((state) => state.userinfo.value);
 
-  const onePrice = 650;
-  const twoPrice = 550;
-  const monitorTotal = increment * onePrice;
-  const gamepadTotal = gameIncrement * twoPrice;
-  const totalPrice = monitorTotal + gamepadTotal;
-
-  const handleIncrement = () => setIncrement((prev) => prev + 1);
-  const handleDecrement = () =>
-    increment > 1 && setIncrement((prev) => prev - 1);
-  const handleGameIncrement = () => setGameIncrement((prev) => prev + 1);
-  const handleGameDecrement = () =>
-    gameIncrement > 1 && setGameIncrement((prev) => prev - 1);
+  const totalPrice = allcartitem.reduce(
+    (acc, item) => acc + item.products.sellingprice * item.quantity,
+    0
+  );
 
   const handleCouponChange = (e) => {
     setCoupon(e.target.value);
@@ -49,7 +42,39 @@ const Cart = () => {
   };
   useEffect(() => {
     fethcartitem();
-  }, []);
+  }, [allcartitem]);
+
+  const Handleincrement = (item) => {
+    axios
+      .patch(`http://localhost:5000/api/v1/cart/incrementcart/${item._id}`)
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const Handledecrement = (item) => {
+    axios
+      .patch(`http://localhost:5000/api/v1/cart/decrementcart/${item._id}`)
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  const HandleDeleteproduct = (item) => {
+    axios
+      .delete(`http://localhost:5000/api/v1/cart/deletecart/${item._id}`)
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <div className="pt-2 pb-20">
@@ -58,7 +83,7 @@ const Cart = () => {
           Home / <span className="text-black">Cart</span>
         </div>
         <div className="mt-10 space-y-10">
-          <div className="hidden md:grid grid-cols-4 bg-white shadow p-4 rounded-md text-center font-semibold">
+          <div className="hidden md:grid grid-cols-4 text-center bg-white shadow p-4 rounded-md  font-semibold">
             <p>Product</p>
             <p>Price</p>
             <p>Quantity</p>
@@ -69,7 +94,7 @@ const Cart = () => {
           {allcartitem.map((item, index) => (
             <div
               key={index}
-              className="flex flex-col md:flex-row items-center justify-between bg-white shadow p-4 rounded-md relative"
+              className="flex flex-col md:grid grid-cols-4 place-items-center  bg-white shadow p-4 rounded-md relative"
             >
               <div className="flex items-center gap-4">
                 <img
@@ -80,22 +105,22 @@ const Cart = () => {
                 <p>{item.products?.name}</p>
               </div>
               <p>${item.products?.sellingprice}</p>
-              <div className="flex items-center gap-2 border p-2 rounded-md">
+              <div className="flex items-center gap-2 border p-2 max-w-fit  rounded-md">
                 <GrFormPrevious
-                  onClick={() =>
-                    item.setQuantity((prev) => Math.max(1, prev - 1))
-                  }
+                  onClick={() => Handledecrement(item)}
                   className="cursor-pointer"
                 />
                 <span>{item.quantity}</span>
-                <GrFormNext
-                  onClick={() => item.setQuantity((prev) => prev + 1)}
-                  className="cursor-pointer"
-                />
+                <GrFormNext onClick={() => Handleincrement(item)} />
               </div>
-              <p>{item.products?.sellingprice * item?.quantity}</p>
-              <button className="absolute top-2 right-2 text-red-500">
-                <RxCross2 />
+              <p className="text-base  ">
+                {item.products?.sellingprice * item?.quantity}
+              </p>
+              <button
+                onClick={() => HandleDeleteproduct(item)}
+                className="absolute text-xl top-8 right-2 text-red-500"
+              >
+                <MdDelete />
               </button>
             </div>
           ))}
