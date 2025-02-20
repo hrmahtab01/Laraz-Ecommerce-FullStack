@@ -1,14 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { RxCross2 } from "react-icons/rx";
 import { GrFormPrevious, GrFormNext } from "react-icons/gr";
 import Container from "../Layout/Container";
 import { Link } from "react-router";
+import axios from "axios";
+import { useSelector } from "react-redux";
 
 const Cart = () => {
   const [increment, setIncrement] = useState(1);
   const [gameIncrement, setGameIncrement] = useState(2);
   const [coupon, setCoupon] = useState("");
   const [couponError, setCouponError] = useState("");
+  const [allcartitem, setAllcartitem] = useState([]);
+  const data = useSelector((state) => state.userinfo.value);
 
   const onePrice = 650;
   const twoPrice = 550;
@@ -33,6 +37,20 @@ const Cart = () => {
     else console.log("Coupon applied successfully");
   };
 
+  const fethcartitem = () => {
+    axios
+      .get(`http://localhost:5000/api/v1/cart/getcart/${data.id}`)
+      .then((result) => {
+        setAllcartitem(result.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  useEffect(() => {
+    fethcartitem();
+  }, []);
+
   return (
     <div className="pt-2 pb-20">
       <Container>
@@ -48,35 +66,20 @@ const Cart = () => {
           </div>
 
           {/* Product List */}
-          {[
-            {
-              name: "LCD Monitor",
-              price: onePrice,
-              quantity: increment,
-              setQuantity: setIncrement,
-              img: "https://eplaza.waltonbd.com/image/cache/data/acc-monitor/ACC_Monitor_angle03_0-00-00-00_copy-220x220h.png",
-            },
-            {
-              name: "H1 Gamepad",
-              price: twoPrice,
-              quantity: gameIncrement,
-              setQuantity: setGameIncrement,
-              img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFy-64JiaBHf4qNPtlww7Gzs-txPbkiT6oN4aI5IoGlg&s",
-            },
-          ].map((item, index) => (
+          {allcartitem.map((item, index) => (
             <div
               key={index}
               className="flex flex-col md:flex-row items-center justify-between bg-white shadow p-4 rounded-md relative"
             >
               <div className="flex items-center gap-4">
                 <img
-                  src={item.img}
-                  alt={item.name}
+                  src={item.products?.image[0]}
+                  alt={item.products?.name}
                   className="w-16 h-16 object-contain"
                 />
-                <p>{item.name}</p>
+                <p>{item.products?.name}</p>
               </div>
-              <p>${item.price}</p>
+              <p>${item.products?.sellingprice}</p>
               <div className="flex items-center gap-2 border p-2 rounded-md">
                 <GrFormPrevious
                   onClick={() =>
@@ -90,7 +93,7 @@ const Cart = () => {
                   className="cursor-pointer"
                 />
               </div>
-              <p>${item.price * item.quantity}</p>
+              <p>{item.products?.sellingprice * item?.quantity}</p>
               <button className="absolute top-2 right-2 text-red-500">
                 <RxCross2 />
               </button>

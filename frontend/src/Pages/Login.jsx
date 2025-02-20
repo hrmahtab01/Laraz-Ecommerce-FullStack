@@ -1,13 +1,47 @@
 import { useState } from "react";
-
 import { Typography, Input, Button } from "@material-tailwind/react";
 import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/solid";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { useDispatch } from "react-redux";
+import { userlogininfo } from "../Slices/UserSilce";
 
 export function Login() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [passwordShown, setPasswordShown] = useState(false);
   const togglePasswordVisiblity = () => setPasswordShown((cur) => !cur);
 
+  const HandleEmailchange = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const HandlePasswordchange = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const HandleLogin = (e) => {
+    e.preventDefault();
+
+    if (email && password) {
+      axios
+        .post("http://localhost:5000/api/v1/auth/login", { email, password })
+        .then((result) => {
+          console.log(result);
+
+          dispatch(userlogininfo(result.data.user));
+          localStorage.setItem("user", JSON.stringify(result.data.user));
+          Cookies.set("token", result.data.token, { expires: 7 });
+          navigate("/");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
   return (
     <section className="grid text-center h-screen items-center p-8">
       <div>
@@ -28,6 +62,8 @@ export function Login() {
               </Typography>
             </label>
             <Input
+              onChange={HandleEmailchange}
+              value={email}
               id="email"
               color="gray"
               size="lg"
@@ -50,6 +86,8 @@ export function Login() {
               </Typography>
             </label>
             <Input
+              onChange={HandlePasswordchange}
+              value={password}
               size="lg"
               placeholder="********"
               labelProps={{
@@ -69,6 +107,8 @@ export function Login() {
             />
           </div>
           <Button
+            onClick={HandleLogin}
+            type="submit"
             color="gray"
             size="lg"
             className="mt-6 bg-primary hover:bg-black duration-300"

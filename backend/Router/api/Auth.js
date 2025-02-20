@@ -3,12 +3,12 @@ const {
   LoginController,
   otpVerifyController,
   resendOtpController,
-  registrationController,
+  signupcontroller,
 } = require("../../Controllers/authController");
 const getusermiddleware = require("../../Middleware/getusermiddleware");
 const router = express.Router();
 
-router.post("/signup", registrationController);
+router.post("/signup", signupcontroller);
 router.post("/login", LoginController);
 router.patch("/otp-verify", otpVerifyController);
 router.patch("/resend-otp", resendOtpController);

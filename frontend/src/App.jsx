@@ -18,12 +18,12 @@ const App = () => {
           <Route index element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/shop" element={<Shop />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
           <Route path="/shop/:productdetails" element={<ProductDetails />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
         </Route>
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
       </Routes>
     </BrowserRouter>
   );

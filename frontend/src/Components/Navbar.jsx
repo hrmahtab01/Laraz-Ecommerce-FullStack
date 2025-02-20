@@ -13,22 +13,15 @@ import {
   IconButton,
 } from "@material-tailwind/react";
 import { CiShoppingBasket } from "react-icons/ci";
-import { MdConnectWithoutContact } from "react-icons/md";
 import { FcAbout } from "react-icons/fc";
 import {
-  CubeTransparentIcon,
   UserCircleIcon,
-  CodeBracketSquareIcon,
-  Square3Stack3DIcon,
   ChevronDownIcon,
-  Cog6ToothIcon,
-  InboxArrowDownIcon,
-  LifebuoyIcon,
   PowerIcon,
-  RocketLaunchIcon,
   Bars2Icon,
 } from "@heroicons/react/24/solid";
 import { Link } from "react-router";
+import { useSelector } from "react-redux";
 
 // profile menu component
 const profileMenuItems = [
@@ -121,9 +114,10 @@ const navListItems = [
 ];
 
 function NavList() {
+  const data = useSelector((state) => state.userinfo.value);
   return (
     <ul className="mt-2  mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center">
-      {navListItems.map(({ label, icon, navigate }, key) => (
+      {navListItems.map(({ label, icon, navigate }, ) => (
         <>
           <Link to={navigate}>
             <Typography
@@ -142,15 +136,19 @@ function NavList() {
           </Link>
         </>
       ))}
-      <Link to={"/login"}>
-        <Button
-          className="text-sm text-primary font-Nunito font-semibold"
-          size="sm"
-          variant="text"
-        >
-          <span>Log In</span>
-        </Button>
-      </Link>
+      {data ? (
+        <h2 className="text-base font-semibold font-Nunito text-primary">{data?.name}</h2>
+      ) : (
+        <Link to={"/login"}>
+          <Button
+            className="text-sm text-primary font-Nunito font-semibold"
+            size="sm"
+            variant="text"
+          >
+            <span>Log In</span>
+          </Button>
+        </Link>
+      )}
     </ul>
   );
 }

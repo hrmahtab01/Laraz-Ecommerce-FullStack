@@ -1,7 +1,34 @@
 import React from "react";
-import { Link } from "react-router";
+import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router";
+import axios from "axios";
 
 const Product = ({ products }) => {
+  const data = useSelector((state) => state.userinfo.value);
+  let naviagate = useNavigate();
+
+  const Handleaddtocart = (item) => {
+    if (!data) {
+      naviagate("/signup");
+
+      //  return alert("Please Login fast and then add to cart ")
+    } else {
+      axios
+        .post("http://localhost:5000/api/v1/cart/addtocart", {
+          user: data.id,
+          products: item._id,
+        })
+        .then((result) => {
+          naviagate("/cart");
+          console.log(result);
+          
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
+
   return (
     <div>
       <div className="relative font-Nunito  flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
@@ -93,9 +120,10 @@ const Product = ({ products }) => {
             </div>
           </div>
           <Link to="">
-            <a
+            <button
+              onClick={() => Handleaddtocart(products)}
               href="#"
-              className="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white bg-primary hover:bg-black duration-300 focus:outline-none focus:ring-4 focus:ring-primary"
+              className="w-full flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white bg-primary hover:bg-black duration-300 focus:outline-none focus:ring-4 focus:ring-primary"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -112,7 +140,7 @@ const Product = ({ products }) => {
                 />
               </svg>
               Add to cart
-            </a>
+            </button>
           </Link>
         </div>
       </div>

@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
 const otp = require("./Otpgenerator");
-const { registetionController } = require("../Controllers/authController");
+
 
 async function Sendemail(email ,type) {
   const transporter = nodemailer.createTransport({

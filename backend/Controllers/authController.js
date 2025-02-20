@@ -1,12 +1,12 @@
-const e = require("express");
+
 const emailValidationCheck = require("../helpers/validateEmail");
 const userModel = require("../Model/userModel");
 const bcrypt = require("bcrypt");
 const Sendemail = require("../helpers/SendEmalil");
-jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 const otpvalue = require("../helpers/Otpgenerator");
 
-async function registrationController(req, res) {
+async function signupcontroller(req, res) {
   const { name, email, password } = req.body;
 
   if (!name || !email || !password) {
@@ -30,7 +30,7 @@ async function registrationController(req, res) {
       Sendemail(email);
       await userModel.findOneAndUpdate(
         { email },
-        { otp: otpvalue },
+        { otp: otpvalue() },
         { new: true }
       );
       setTimeout(async () => {
@@ -137,7 +137,7 @@ async function resendOtpController(req, res) {
 }
 
 module.exports = {
-  registrationController,
+  signupcontroller,
   LoginController,
   otpVerifyController,
   resendOtpController,

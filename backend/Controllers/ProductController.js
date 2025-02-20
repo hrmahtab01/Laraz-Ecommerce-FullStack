@@ -211,7 +211,6 @@ async function updateProductController(req, res) {
     if (!product) {
       return res.status(404).send({ success: false, message: "Product not found" });
     }
-
    
     if (newImages.length > 0 && product.image) {
       await Promise.all(
@@ -225,8 +224,6 @@ async function updateProductController(req, res) {
         })
       );
     }
-
-   
     const updatedProduct = await productModel.findByIdAndUpdate(
       id,
       {
