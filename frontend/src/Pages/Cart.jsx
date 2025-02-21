@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { RxCross2 } from "react-icons/rx";
 import { GrFormPrevious, GrFormNext } from "react-icons/gr";
 import Container from "../Layout/Container";
 import { Link } from "react-router";
@@ -8,8 +7,6 @@ import { useSelector } from "react-redux";
 import { MdDelete } from "react-icons/md";
 
 const Cart = () => {
-  const [increment, setIncrement] = useState(1);
-  const [gameIncrement, setGameIncrement] = useState(2);
   const [coupon, setCoupon] = useState("");
   const [couponError, setCouponError] = useState("");
   const [allcartitem, setAllcartitem] = useState([]);
@@ -111,7 +108,10 @@ const Cart = () => {
                   className="cursor-pointer"
                 />
                 <span>{item.quantity}</span>
-                <GrFormNext onClick={() => Handleincrement(item)} />
+                <GrFormNext
+                  className="cursor-pointer"
+                  onClick={() => Handleincrement(item)}
+                />
               </div>
               <p className="text-base  ">
                 {item.products?.sellingprice * item?.quantity}

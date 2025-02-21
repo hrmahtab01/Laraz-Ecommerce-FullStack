@@ -1,11 +1,16 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
+import { useSelector } from "react-redux";
+import { ToastContainer, Slide, toast } from "react-toastify";
 
 const ProductDetails = () => {
   const { id } = useParams();
   const [singleproductdetails, setSingleproductdetails] = useState({});
   const [productImage, setProductImage] = useState([]);
+  const data = useSelector((state) => state.userinfo.value);
+  const [quantity, setQuantity] = useState(1);
+  const navigate = useNavigate();
 
   const fetchsingleproduct = () => {
     axios
@@ -24,11 +29,73 @@ const ProductDetails = () => {
     fetchsingleproduct();
   }, []);
 
+  const HandleAddtocart = (id) => {
+    if (!data) {
+      return navigate("/login");
+    } else {
+      axios
+        .post(`http://localhost:5000/api/v1/cart/addtocart`, {
+          user: data.id,
+          products: id,
+          quantity: quantity,
+        })
+        .then((result) => {
+          toast.success(result?.data?.message || "add to cart successfully", {
+            position: "top-left",
+            autoClose: 2500,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+            transition: Slide,
+          });
+          setTimeout(() => {
+            
+            navigate("/cart");
+          }, 3000);
+        })
+        .catch((error) => {
+          toast.error(error?.response?.data.error || "Something went wrong", {
+            position: "top-left",
+            autoClose: 2500,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Slide,
+          });
+        });
+    }
+  };
+
   const [activeImage, SetactiveImage] = useState(0);
- 
+
+  const handleproductqQuantity = (e) => {
+    if (singleproductdetails.stock >= e.target.value) {
+      setQuantity(e.target.value);
+    }
+  };
+
   return (
     <>
       <div className="bg-gray-100">
+        <ToastContainer
+          position="top-left"
+          autoClose={2500}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick={false}
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+          transition={Slide}
+        />
         <div className="container mx-auto px-4 py-8">
           <div className="flex flex-wrap -mx-4">
             {/* Product Images */}
@@ -56,17 +123,15 @@ const ProductDetails = () => {
             {/* Product Details */}
             <div className="w-full md:w-1/2 px-4">
               <h2 className="text-3xl font-bold font-tirobangla mb-2">
-                Premium Wireless Headphones
+                {singleproductdetails.name}
               </h2>
-              <p className="text-primary mb-4 font-tirobangla">
-                SKU: WH1000XM4
-              </p>
+
               <div className="mb-4">
                 <span className="text-2xl font-bold mr-2 font-tirobangla">
-                  $349.99
+                  {singleproductdetails.sellingprice}
                 </span>
                 <span className="text-gray-500 line-through font-tirobangla">
-                  $399.99
+                  {singleproductdetails.discountprice}
                 </span>
               </div>
               <div className="flex items-center mb-4">
@@ -135,9 +200,7 @@ const ProductDetails = () => {
                 </span>
               </div>
               <p className="text-black mb-6 font-tirobangla">
-                Experience premium sound quality and industry-leading noise
-                cancellation with these wireless headphones. Perfect for music
-                lovers and frequent travelers.
+                {singleproductdetails.description}
               </p>
               <div className="mb-6">
                 <h3 className="text-lg font-semibold mb-2 font-tirobangla">
@@ -157,6 +220,8 @@ const ProductDetails = () => {
                   Quantity:
                 </label>
                 <input
+                  onChange={handleproductqQuantity}
+                  value={quantity}
                   type="number"
                   id="quantity"
                   name="quantity"
@@ -166,7 +231,10 @@ const ProductDetails = () => {
                 />
               </div>
               <div className="flex space-x-4 mb-6">
-                <button className="bg-primary flex gap-2 items-center text-white px-6 py-2 rounded-md hover:bg-black duration-150 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                <button
+                  onClick={() => HandleAddtocart(singleproductdetails._id)}
+                  className="bg-primary flex gap-2 items-center text-white px-6 py-2 rounded-md hover:bg-black duration-150 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -200,17 +268,6 @@ const ProductDetails = () => {
                   </svg>
                   Wishlist
                 </button>
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold mb-2 font-tirobangla">
-                  Key Features:
-                </h3>
-                <ul className="list-disc list-inside text-black font-tirobangla">
-                  <li>Industry-leading noise cancellation</li>
-                  <li>30-hour battery life</li>
-                  <li>Touch sensor controls</li>
-                  <li>Speak-to-chat technology</li>
-                </ul>
               </div>
             </div>
           </div>

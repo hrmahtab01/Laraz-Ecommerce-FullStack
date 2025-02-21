@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { Link, Navigate, useNavigate } from "react-router";
 import axios from "axios";
 
-const Product = ({ products }) => {
+const Categoryproduct = ({ products }) => {
   const data = useSelector((state) => state.userinfo.value);
   let naviagate = useNavigate();
 
@@ -30,7 +30,10 @@ const Product = ({ products }) => {
 
   const HandleProductdetails = (item) => {
     naviagate(`/productdetails/${item}`);
+    
   };
+  console.log(products);
+  
 
   return (
     <div onClick={() => HandleProductdetails(products._id)}>
@@ -151,4 +154,4 @@ const Product = ({ products }) => {
   );
 };
 
-export default Product;
+export default Categoryproduct;

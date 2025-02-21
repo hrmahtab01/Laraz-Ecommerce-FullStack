@@ -3,10 +3,12 @@ import Container from "../Layout/Container";
 import Image from "../Layout/Image";
 import axios from "axios";
 import ProductSkeleton from "../Layout/ProductSkeleton";
+import { useNavigate } from "react-router";
 
 const Categoris = () => {
   const [allcategory, Setallcategory] = useState([]);
   const [loader, Setloader] = useState(false);
+  const navigate = useNavigate();
 
   const fetchallcategory = () => {
     Setloader(true);
@@ -27,6 +29,9 @@ const Categoris = () => {
     Setloader(false);
   }, []);
 
+  const handlescategoryproduct = (id) => {
+    navigate(`/singlecategoryproduct/${id}`);
+  };
   return (
     <section className="mt-[50px]">
       <Container>
@@ -48,7 +53,11 @@ const Categoris = () => {
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-2 xl:grid-cols-4">
               {allcategory.map((item) => (
                 <>
-                  <div className="xl:w-[300px] mt-5  border border-gray-500 p-3 rounded-xl gap-4">
+                  <div
+                    onClick={() => handlescategoryproduct(item._id)}
+                    key={item._id}
+                    className="xl:w-[300px] mt-5 cursor-pointer border border-gray-500 p-3 rounded-xl gap-4"
+                  >
                     <Image
                       className="w-full lg:h-[250px] object-contain"
                       src={item.image}

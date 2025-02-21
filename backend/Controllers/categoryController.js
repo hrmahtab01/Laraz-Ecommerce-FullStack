@@ -78,7 +78,9 @@ async function allcategoryController(req, res) {
 async function getsinglecategoryController(req, res) {
   const { id } = req.params;
   try {
-    const singlecategory = await categoryModel.findOne({ _id: id });
+    const singlecategory = await categoryModel
+      .findOne({ _id: id })
+      .populate("product");
     if (!singlecategory) {
       return res
         .status(404)
@@ -107,10 +109,7 @@ async function updatecategoryController(req, res) {
   const { filename } = req.file;
 
   try {
-    const exitcategory = await categoryModel.findOne(
-      { _id: id },
-     
-    );
+    const exitcategory = await categoryModel.findOne({ _id: id });
     if (!exitcategory) {
       return res
         .status(404)
