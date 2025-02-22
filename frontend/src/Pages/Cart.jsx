@@ -13,7 +13,7 @@ const Cart = () => {
   const data = useSelector((state) => state.userinfo.value);
 
   const totalPrice = allcartitem.reduce(
-    (acc, item) => acc + item.products.sellingprice * item.quantity,
+    (acc, item) => acc + item.products?.sellingprice * item.quantity,
     0
   );
 

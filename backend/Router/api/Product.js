@@ -49,6 +49,6 @@ router.get("/allproduct", getallProductController);
 router.patch("/isfeatured/:id", Checkadminmiddleware, isfeaturedController);
 router.get("/featuredproduct", getfeatureproduct);
 router.get("/singleproduct/:id", getsingleproductController);
-router.patch("/updateproduct/:id" , Checkadminmiddleware , upload.array("image"),multerErrorCheck ,updateProductController )
+router.patch("/updateproduct/:id" , Checkadminmiddleware ,multerErrorCheck, upload.array("image"), updateProductController )
 
 module.exports = router;
