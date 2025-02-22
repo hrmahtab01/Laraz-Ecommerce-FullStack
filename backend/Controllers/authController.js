@@ -79,7 +79,7 @@ async function LoginController(req, res) {
             });
           } else if (exituser.role === "admin") {
             token = jwt.sign({ tokeninfo }, process.env.prv_key, {
-              expiresIn: "5 minutes",
+              expiresIn: "20 minutes",
             });
             res.cookie("token", token, {
               httponly: true,

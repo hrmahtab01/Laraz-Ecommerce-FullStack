@@ -57,7 +57,7 @@ const Login = () => {
             Cookies.set(
               "user",
               String(result.data.user.role + result.data.user.id),
-              { expires: 5 / 1440 }
+              { expires: 20 / 1440 }
             );
             navigate("/");
           }, 2500);

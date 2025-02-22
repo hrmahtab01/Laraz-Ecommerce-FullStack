@@ -43,7 +43,7 @@ export default function AllProduct() {
   }, []);
 
   return (
-    <Card className="h-full w-full">
+    <Card className="h-full w-full ">
       <CardHeader floated={false} shadow={false} className="rounded-none">
         <div className="mb-4 flex flex-col justify-between gap-8 md:flex-row md:items-center">
           <Typography variant="h5" color="blue-gray">
@@ -83,9 +83,8 @@ export default function AllProduct() {
               ))}
             </tr>
           </thead>
-          <tbody></tbody>
         </table>
-        <Paginate itemsPerPage={5} productItems={allproduct} />
+        <Paginate itemsPerPage={10} productItems={allproduct} />
       </CardBody>
     </Card>
   );
