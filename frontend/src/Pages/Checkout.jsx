@@ -1,9 +1,33 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { MdDone } from "react-icons/md";
 import Container from "../Layout/Container";
+import axios from "axios";
+import { useSelector } from "react-redux";
 
 const Checkout = () => {
+  const [allcartitem, setAllcartitem] = useState([]);
+  const data = useSelector((state) => state.userinfo.value);
+
+  const fethcartitem = () => {
+    axios
+      .get(`http://localhost:5000/api/v1/cart/getcart/${data.id}`)
+      .then((result) => {
+        setAllcartitem(result.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  useEffect(() => {
+    fethcartitem();
+  }, []);
+
+  const totalPrice = allcartitem.reduce(
+    (acc, item) => acc + item.products?.discountprice * item.quantity,
+    0
+  );
+
   return (
     <div className="pt-[80px] pb-[140px]">
       <Container>
@@ -77,59 +101,49 @@ const Checkout = () => {
                     Email Address<span className="text-ThirdColor">*</span>
                   </p>
                   <input
-                    className="w-full h-[50px] bg-[#F5F5F5] rounded-[4px] text-base text-primaryColor font-normal font-Nunito pl-5 mt-2"
+                    className="w-full h-[50px]  focus:border-t-teal-500 bg-[#F5F5F5] rounded-[4px] text-base text-primaryColor font-normal font-Nunito pl-5 mt-2"
                     type="text"
                   />
                 </div>
                 <div className="flex mt-6 gap-4">
-                  <div className="w-[24px] h-[24px] bg-ThirdColor rounded-[4px] flex justify-center items-center">
-                    <MdDone className="text-Secondary text-[14px]" />
-                  </div>
-                  <p className="text-base text-primaryColor font-normal font-Nunito">
-                    Save this information for faster check-out next time
-                  </p>
+                  <label className="flex items-center gap-4 mt-6">
+                    <input type="checkbox" className="w-[24px] h-[24px]" />
+                    <span className="text-base text-primaryColor font-normal font-Nunito">
+                      Save this information for faster check-out next time
+                    </span>
+                  </label>
                 </div>
               </div>
             </div>
             <div className="w-[527px] h-[600px] mt-[80px]">
               <div>
-                <div className="flex justify-between items-center w-[422px] h-[54px]">
-                  <div className="flex gap-6 items-center ">
-                    <img
-                      className="w-[49px] h-[42px]"
-                      src="https://eplaza.waltonbd.com/image/cache/data/acc-monitor/ACC_Monitor_angle03_0-00-00-00_copy-220x220h.png"
-                      alt="monitorImage"
-                    />
-                    <p className="text-base text-primaryColor font-normal font-Nunito">
-                      LCD Monitor
-                    </p>
-                  </div>
-                  <p className="text-base text-primaryColor font-normal font-Nunito">
-                    $650
-                  </p>
-                </div>
-                <div className="flex justify-between items-center mt-[32px] w-[422px] h-[54px]">
-                  <div className="flex gap-6 items-center">
-                    <img
-                      className="w-[49px] h-[42px]"
-                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFy-64JiaBHf4qNPtlww7Gzs-txPbkiT6oN4aI5IoGlg&s"
-                      alt="GamingImage"
-                    />
-                    <p className="text-base text-primaryColor font-normal font-Nunito">
-                      H1 Gamepad
-                    </p>
-                  </div>
-                  <p className="text-base text-primaryColor font-normal font-Nunito">
-                    $1100
-                  </p>
-                </div>
+                {allcartitem.map((item) => (
+                  <>
+                    <div className="flex justify-between items-center w-[422px] h-[54px]">
+                      <div className="flex gap-6 items-center ">
+                        <img
+                          className="w-[49px] h-[42px]"
+                          src={item?.products?.image[0] || ""}
+                          alt="monitorImage"
+                        />
+                        <p className="text-base text-primaryColor font-normal font-Nunito">
+                          {item?.products?.name}
+                        </p>
+                      </div>
+                      <p className="text-base text-primaryColor font-normal font-Nunito">
+                        {item?.products?.discountprice}
+                      </p>
+                    </div>
+                  </>
+                ))}
+
                 <div className="mt-[32px]">
                   <div className="flex justify-between border-b pt-[24px] pb-[16px] border-primaryColor w-[422px]">
                     <p className="text-base  text-primaryColor font-normal font-Nunito">
                       Subtotal:
                     </p>
                     <p className="text-base  text-primaryColor font-normal font-Nunito">
-                      $1750
+                      {totalPrice}
                     </p>
                   </div>
                   <div className="flex justify-between border-b pt-[24px] pb-[16px] border-primaryColor w-[422px]">
@@ -145,51 +159,35 @@ const Checkout = () => {
                       Total:
                     </p>
                     <p className="text-base  text-primaryColor font-normal font-Nunito">
-                      $1750
+                      {totalPrice}
                     </p>
                   </div>
                 </div>
-                <div className="mt-[32px] flex gap-[155px]">
-                  <div className="flex gap-4">
+                <div className="mt-[32px] flex flex-col gap-4">
+                  <label className="flex items-center gap-4">
                     <input
-                      className="w-[24px] h-[24px] bg-primaryColor active:bg-primaryColor"
                       type="radio"
+                      name="paymentMethod"
+                      value="bank"
+                      className="w-[24px] h-[24px]"
                     />
-                    <p className="text-base text-primaryColor font-normal font-Nunito">
-                      Bank
-                    </p>
-                  </div>
-                  <div className="flex gap-2">
-                    <img
-                      className="w-[42px] h-[28px]"
-                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6g7yjR8QrKmX5nE29j1xwcHbRqU_DUkHWd4jI7aMN_Vu32GLgh56vG1c&s"
-                      alt="BkashImage"
+                    <span className="text-base text-primaryColor font-normal font-Nunito">
+                     Online
+                    </span>
+                  </label>
+
+                  <label className="flex items-center gap-4">
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      checked
+                      value="cod"
+                      className="w-[24px] h-[24px]"
                     />
-                    <img
-                      className="w-[42px] h-[28px]"
-                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRlLQ570tYriFev_vd83l_HwbyI6KYkXHCSgexJcY6uP7SCXI0qWppE9g&s"
-                      alt="Visaimage"
-                    />
-                    <img
-                      className="w-[42px] h-[28px]"
-                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfMP4-wxGtDMemcwkXOriHwvxtBtHc_k8nktIG_2qZlw&s"
-                      alt="MastercardImage"
-                    />
-                    <img
-                      className="w-[42px] h-[28px]"
-                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLdKCbUasrDfz_EhGuyl3a6E1zPUDNOPOirtrix9pTUQ&s"
-                      alt="NagadImage"
-                    />
-                  </div>
-                </div>
-                <div className="flex gap-4 mt-[32px]">
-                  <input
-                    className="w-[24px] circle h-[24px] bg-primaryColor checked:bg-primary focus:bg-primary"
-                    type="radio"
-                  />
-                  <p className="text-base text-primaryColor font-normal font-Nunito">
-                    Cash on delivery
-                  </p>
+                    <span className="text-base text-primaryColor font-normal font-Nunito">
+                      Cash on Delivery
+                    </span>
+                  </label>
                 </div>
                 <div className="md:flex gap-4 mt-[32px] grid grid-cols-1">
                   <input
@@ -197,11 +195,11 @@ const Checkout = () => {
                     type="text"
                     placeholder="Coupon Code"
                   />
-                  <button className="w-[211px] h-[56px] bg-ThirdColor text-base text-Secondary font-medium font-Nunito rounded-[4px]">
+                  <button className="w-[211px] h-[56px] bg-primary text-base text-white hover:bg-black duration-300 font-medium font-Nunito rounded-[4px]">
                     Apply Coupon
                   </button>
                 </div>
-                <button className="w-[211px] h-[56px] bg-ThirdColor text-base text-Secondary font-medium font-Nunito rounded-[4px] mt-[32px]">
+                <button className="w-[211px] h-[56px] bg-primary text-base text-white font-medium hover:bg-black duration-300 font-Nunito rounded-[4px] mt-[32px]">
                   Place Order
                 </button>
               </div>

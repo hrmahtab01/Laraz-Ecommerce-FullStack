@@ -13,7 +13,7 @@ const Cart = () => {
   const data = useSelector((state) => state.userinfo.value);
 
   const totalPrice = allcartitem.reduce(
-    (acc, item) => acc + item.products?.sellingprice * item.quantity,
+    (acc, item) => acc + item.products?.discountprice * item.quantity,
     0
   );
 
@@ -101,7 +101,7 @@ const Cart = () => {
                 />
                 <p>{item.products?.name}</p>
               </div>
-              <p>${item.products?.sellingprice}</p>
+              <p>${item.products?.discountprice}</p>
               <div className="flex items-center gap-2 border p-2 max-w-fit  rounded-md">
                 <GrFormPrevious
                   onClick={() => Handledecrement(item)}
@@ -114,7 +114,7 @@ const Cart = () => {
                 />
               </div>
               <p className="text-base  ">
-                {item.products?.sellingprice * item?.quantity}
+                {item.products?.discountprice * item?.quantity}
               </p>
               <button
                 onClick={() => HandleDeleteproduct(item)}
@@ -140,7 +140,7 @@ const Cart = () => {
             />
             <button
               onClick={handleApplyCoupon}
-              className="mt-2 bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-700"
+              className="mt-2 bg-red-800  text-white px-6 py-2 rounded-md hover:bg-gradient-to-r from-pink-500 to-black fill-transparent duration-300  "
             >
               Apply Coupon
             </button>
