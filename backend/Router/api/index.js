@@ -5,6 +5,7 @@ const category = require("./Category");
 const product = require("./Product");
 const store = require("./Store");
 const cart = require("./Cart");
+const order = require("./Order");
 
 // http://localhost:4000/api/v1/auth
 router.use("/auth", auth);
@@ -16,5 +17,8 @@ router.use("/product", product);
 router.use("/store", store);
 // http://localhost:4000/api/v1/cart
 router.use("/cart", cart);
+
+// http://localhost:4000/api/v1/order
+router.use("/order", order);
 
 module.exports = router;

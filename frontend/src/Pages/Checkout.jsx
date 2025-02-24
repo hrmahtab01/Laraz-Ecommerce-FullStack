@@ -172,7 +172,7 @@ const Checkout = () => {
                       className="w-[24px] h-[24px]"
                     />
                     <span className="text-base text-primaryColor font-normal font-Nunito">
-                     Online
+                      Online
                     </span>
                   </label>
 

@@ -6,17 +6,28 @@ const orderschema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",
     },
-    cartitem: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Cart",
-    },
+    cartitem: [
+      {
+        productid: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Product",
+        },
+        quantity: {
+          type: Number,
+        },
+      },
+    ],
     totalprice: {
       type: Number,
     },
     paymentstatus: {
       type: String,
-      enum: ["paid", "unpain"],
+      enum: ["paid", "unpaid"],
       default: "unpaid",
+    },
+    paymentmethod: {
+      type: String,
+      enum: ["COD", "card"],
     },
     address: {
       type: String,
@@ -35,3 +46,6 @@ const orderschema = mongoose.Schema(
     timestamps: true,
   }
 );
+
+const orderModel = mongoose.model("Order", orderschema);
+module.exports = orderModel;
