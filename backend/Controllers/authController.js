@@ -30,7 +30,7 @@ async function signupcontroller(req, res) {
       Sendemail(email);
       await userModel.findOneAndUpdate(
         { email },
-        { otp: otpvalue() },
+        { otp: otpvalue },
         { new: true }
       );
       setTimeout(async () => {

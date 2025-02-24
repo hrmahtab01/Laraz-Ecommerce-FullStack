@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { GrFormPrevious, GrFormNext } from "react-icons/gr";
 import Container from "../Layout/Container";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { MdDelete } from "react-icons/md";
@@ -11,6 +11,7 @@ const Cart = () => {
   const [couponError, setCouponError] = useState("");
   const [allcartitem, setAllcartitem] = useState([]);
   const data = useSelector((state) => state.userinfo.value);
+  const navigate = useNavigate();
 
   const totalPrice = allcartitem.reduce(
     (acc, item) => acc + item.products?.discountprice * item.quantity,
@@ -28,6 +29,9 @@ const Cart = () => {
   };
 
   const fethcartitem = () => {
+    if (!data) {
+      return navigate("/");
+    }
     axios
       .get(`http://localhost:5000/api/v1/cart/getcart/${data.id}`)
       .then((result) => {
