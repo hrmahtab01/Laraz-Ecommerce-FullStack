@@ -8,6 +8,12 @@ import { useSelector } from "react-redux";
 const Checkout = () => {
   const [allcartitem, setAllcartitem] = useState([]);
   const data = useSelector((state) => state.userinfo.value);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [paymentmethod, Setpaymentmethod] = useState("COD");
 
   const fethcartitem = () => {
     axios
@@ -28,6 +34,35 @@ const Checkout = () => {
     0
   );
 
+  const cart = allcartitem.map((item) => {
+    return {
+      productid: item.products._id,
+      quantity: item.quantity,
+    };
+  });
+
+  const Handleplaceorder = () => {
+    axios
+      .post("http://localhost:5000/api/v1/order/addtoorder", {
+        user: data.id,
+        name,
+        email,
+        phone,
+        address,
+        city,
+        paymentmethod: paymentmethod,
+        cartitem: cart,
+        totalprice: totalPrice,
+      })
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  console.log(paymentmethod);
+
   return (
     <div className="pt-[80px] pb-[140px]">
       <Container>
@@ -36,53 +71,40 @@ const Checkout = () => {
             Accout / My account / Product / View cart /{" "}
             <span className="text-primaryColor">CheckOut</span>{" "}
           </p>
-          <div className=" mt-[80px] gap-[173px] md:flex grid grid-cols-1">
+          <div className=" md:mt-[80px] mt-[40px] gap-[173px] md:flex grid grid-cols-1">
             <div>
               <h2 className="text-4xl text-primaryColor font-medium font-inter leading-[31px]">
                 Billing Details
               </h2>
-              <div className="w-[470px] h-[814px]">
+              <div className="w-[470px] h-[614px]">
                 <div className="mt-[48px]">
                   <p className="text-base text-primaryColor/40 font-normal font-Nunito">
-                    First Name<span className="text-ThirdColor">*</span>
+                    Name<span className="text-ThirdColor">*</span>
                   </p>
                   <input
+                    onChange={(e) => setName(e.target.value)}
                     className="w-full h-[50px] bg-[#F5F5F5] rounded-[4px] text-base text-primaryColor font-normal font-Nunito pl-5 mt-2"
                     type="text"
                   />
                 </div>
+
                 <div className="mt-[32px]">
                   <p className="text-base text-primaryColor/40 font-normal font-Nunito">
-                    Company Name
+                    Address
                   </p>
                   <input
+                    onChange={(e) => setAddress(e.target.value)}
                     className="w-full h-[50px] bg-[#F5F5F5] rounded-[4px] text-base text-primaryColor font-normal font-Nunito pl-5 mt-2"
                     type="text"
                   />
                 </div>
-                <div className="mt-[32px]">
-                  <p className="text-base text-primaryColor/40 font-normal font-Nunito">
-                    Street Address
-                  </p>
-                  <input
-                    className="w-full h-[50px] bg-[#F5F5F5] rounded-[4px] text-base text-primaryColor font-normal font-Nunito pl-5 mt-2"
-                    type="text"
-                  />
-                </div>
-                <div className="mt-[32px]">
-                  <p className="text-base text-primaryColor/40 font-normal font-Nunito">
-                    Apartment, floor, etc. (optional)
-                  </p>
-                  <input
-                    className="w-full h-[50px] bg-[#F5F5F5] rounded-[4px] text-base text-primaryColor font-normal font-Nunito pl-5 mt-2"
-                    type="text"
-                  />
-                </div>
+
                 <div className="mt-[32px]">
                   <p className="text-base text-primaryColor/40 font-normal font-Nunito">
                     Town/City<span className="text-ThirdColor">*</span>
                   </p>
                   <input
+                    onChange={(e) => setCity(e.target.value)}
                     className="w-full h-[50px] bg-[#F5F5F5] rounded-[4px] text-base text-primaryColor font-normal font-Nunito pl-5 mt-2"
                     type="text"
                   />
@@ -92,6 +114,7 @@ const Checkout = () => {
                     Phone Number<span className="text-ThirdColor">*</span>
                   </p>
                   <input
+                    onChange={(e) => setPhone(e.target.value)}
                     className="w-full h-[50px] bg-[#F5F5F5] rounded-[4px] text-base text-primaryColor font-normal font-Nunito pl-5 mt-2"
                     type="text"
                   />
@@ -101,6 +124,7 @@ const Checkout = () => {
                     Email Address<span className="text-ThirdColor">*</span>
                   </p>
                   <input
+                    onChange={(e) => setEmail(e.target.value)}
                     className="w-full h-[50px]  focus:border-t-teal-500 bg-[#F5F5F5] rounded-[4px] text-base text-primaryColor font-normal font-Nunito pl-5 mt-2"
                     type="text"
                   />
@@ -115,14 +139,14 @@ const Checkout = () => {
                 </div>
               </div>
             </div>
-            <div className="w-[527px] h-[600px] mt-[80px]">
+            <div className="w-[527px] h-[600px] ">
               <div>
                 {allcartitem.map((item) => (
                   <>
-                    <div className="flex justify-between items-center w-[422px] h-[54px]">
+                    <div className="flex justify-between items-center w-[350px] md:w-[422px] h-[54px]">
                       <div className="flex gap-6 items-center ">
                         <img
-                          className="w-[49px] h-[42px]"
+                          className="w-[49px] h-[42px] object-cover"
                           src={item?.products?.image[0] || ""}
                           alt="monitorImage"
                         />
@@ -138,7 +162,7 @@ const Checkout = () => {
                 ))}
 
                 <div className="mt-[32px]">
-                  <div className="flex justify-between border-b pt-[24px] pb-[16px] border-primaryColor w-[422px]">
+                  <div className="flex justify-between border-b pt-[24px] pb-[16px] border-primaryColor w-[350px] md:w-[422px]">
                     <p className="text-base  text-primaryColor font-normal font-Nunito">
                       Subtotal:
                     </p>
@@ -146,7 +170,7 @@ const Checkout = () => {
                       {totalPrice}
                     </p>
                   </div>
-                  <div className="flex justify-between border-b pt-[24px] pb-[16px] border-primaryColor w-[422px]">
+                  <div className="flex justify-between border-b pt-[24px] pb-[16px] border-primaryColor w-[350px] md:w-[422px]">
                     <p className="text-base  text-primaryColor font-normal font-Nunito">
                       Shipping:
                     </p>
@@ -154,7 +178,7 @@ const Checkout = () => {
                       Free
                     </p>
                   </div>
-                  <div className="flex justify-between pt-[16px] pb-[16px] w-[422px] ">
+                  <div className="flex justify-between pt-[16px] pb-[16px] w-[350px] md:w-[422px] ">
                     <p className="text-base  text-primaryColor font-normal font-Nunito">
                       Total:
                     </p>
@@ -166,9 +190,10 @@ const Checkout = () => {
                 <div className="mt-[32px] flex flex-col gap-4">
                   <label className="flex items-center gap-4">
                     <input
+                      onChange={(e) => Setpaymentmethod(e.target.value)}
                       type="radio"
                       name="paymentMethod"
-                      value="bank"
+                      value="Online"
                       className="w-[24px] h-[24px]"
                     />
                     <span className="text-base text-primaryColor font-normal font-Nunito">
@@ -178,10 +203,11 @@ const Checkout = () => {
 
                   <label className="flex items-center gap-4">
                     <input
+                      onChange={(e) => Setpaymentmethod(e.target.value)}
                       type="radio"
                       name="paymentMethod"
-                      checked
-                      value="cod"
+                      defaultChecked
+                      value="COD"
                       className="w-[24px] h-[24px]"
                     />
                     <span className="text-base text-primaryColor font-normal font-Nunito">
@@ -199,7 +225,10 @@ const Checkout = () => {
                     Apply Coupon
                   </button>
                 </div>
-                <button className="w-[211px] h-[56px] bg-primary text-base text-white font-medium hover:bg-black duration-300 font-Nunito rounded-[4px] mt-[32px]">
+                <button
+                  onClick={Handleplaceorder}
+                  className="md:w-[211px] w-full h-[56px] bg-primary text-base text-white font-medium hover:bg-black duration-300 font-Nunito rounded-[4px] mt-[32px]"
+                >
                   Place Order
                 </button>
               </div>

@@ -17,6 +17,10 @@ const orderschema = mongoose.Schema(
         },
       },
     ],
+    name: {
+      type: String,
+      required: true,
+    },
     totalprice: {
       type: Number,
     },
@@ -40,6 +44,9 @@ const orderschema = mongoose.Schema(
     phone: {
       type: String,
       required: true,
+    },
+    email: {
+      type: String,
     },
   },
   {

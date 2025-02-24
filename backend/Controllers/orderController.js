@@ -10,6 +10,7 @@ async function AddtoorderController(req, res) {
     address,
     city,
     phone,
+    name
   } = req.body;
 
   try {
@@ -23,6 +24,7 @@ async function AddtoorderController(req, res) {
         address,
         city,
         phone,
+        name
       });
       await order.save();
       return res.status(201).send({
