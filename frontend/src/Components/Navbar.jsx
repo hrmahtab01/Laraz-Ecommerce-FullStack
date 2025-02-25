@@ -14,6 +14,7 @@ import {
 } from "@material-tailwind/react";
 import { CiShoppingBasket } from "react-icons/ci";
 import { FcAbout } from "react-icons/fc";
+import { IoMdCart } from "react-icons/io";
 import {
   UserCircleIcon,
   ChevronDownIcon,
@@ -117,7 +118,7 @@ function NavList() {
   const data = useSelector((state) => state.userinfo.value);
   return (
     <ul className="mt-2  mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center">
-      {navListItems.map(({ label, icon, navigate }, ) => (
+      {navListItems.map(({ label, icon, navigate }) => (
         <>
           <Link to={navigate}>
             <Typography
@@ -137,7 +138,9 @@ function NavList() {
         </>
       ))}
       {data ? (
-        <h2 className="text-base font-semibold font-Nunito text-primary">{data?.name}</h2>
+        <h2 className="text-base font-semibold font-Nunito text-primary">
+          {data?.name}
+        </h2>
       ) : (
         <Link to={"/login"}>
           <Button
@@ -188,7 +191,10 @@ export function EcommerceNavbar() {
         >
           <Bars2Icon className="h-6 w-6" />
         </IconButton>
-
+        <Link to='/cart'>
+          {" "}
+          <IoMdCart className="text-3xl font-bold font-Nunito text-primary mr-5 flex items-center cursor-pointer" />
+        </Link>
         <ProfileMenu />
       </div>
       <MobileNav open={isNavOpen} className="overflow-scroll">
