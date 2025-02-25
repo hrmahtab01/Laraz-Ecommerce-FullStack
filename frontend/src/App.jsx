@@ -10,6 +10,7 @@ import ProductDetails from "./Pages/ProductDetails";
 import Cart from "./Pages/Cart";
 import Checkout from "./Pages/Checkout";
 import Singlecategoryproducts from "./Components/Singlecategoryproducts";
+import OtpVerify from "./Components/OtpVerify";
 
 const App = () => {
   return (
@@ -29,6 +30,7 @@ const App = () => {
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/otpverify" element={<OtpVerify />} />
       </Routes>
     </BrowserRouter>
   );

@@ -19,7 +19,7 @@ const Checkout = () => {
 
   const fethcartitem = () => {
     axios
-      .get(`http://localhost:5000/api/v1/cart/getcart/${data.id}`)
+      .get(`http://localhost:5000/api/v1/cart/getcart/${data?.id}`)
       .then((result) => {
         setAllcartitem(result.data.data);
       })

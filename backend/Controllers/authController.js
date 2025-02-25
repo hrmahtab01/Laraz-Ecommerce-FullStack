@@ -1,4 +1,3 @@
-
 const emailValidationCheck = require("../helpers/validateEmail");
 const userModel = require("../Model/userModel");
 const bcrypt = require("bcrypt");
@@ -40,13 +39,11 @@ async function signupcontroller(req, res) {
           { new: true }
         );
       }, 120000);
-      res
-        .status(201)
-        .send({
-          success: true,
-          message: "user registered successfully",
-          data: user,
-        });
+      res.status(201).send({
+        success: true,
+        message: "user signup successfully",
+        data: user,
+      });
     });
   } catch (error) {
     return res.status(500).send({ success: false, error: error.message });

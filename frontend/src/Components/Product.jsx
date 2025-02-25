@@ -33,7 +33,7 @@ const Product = ({ products }) => {
   };
 
   return (
-    <div onClick={() => HandleProductdetails(products._id)}>
+    <div onClick={() => HandleProductdetails(products?._id)}>
       <div className="relative font-Nunito  flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
         <Link to="">
           <a

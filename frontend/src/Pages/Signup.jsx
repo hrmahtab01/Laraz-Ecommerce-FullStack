@@ -5,6 +5,8 @@ import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/solid";
 import { Link, useNavigate } from "react-router";
 import axios from "axios";
 import { Slide, toast, ToastContainer } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { otpdatainfo } from "../Slices/OtpverifySlice";
 
 export function Signup() {
   const [passwordShown, setPasswordShown] = useState(false);
@@ -14,6 +16,7 @@ export function Signup() {
   const [name, setName] = useState("");
   const [loader, setLoader] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const HandleNamechange = (e) => {
     setName(e.target.value);
@@ -48,9 +51,10 @@ export function Signup() {
           transition: Slide,
         });
 
+        dispatch(otpdatainfo(result.data.data.email));
         setTimeout(() => {
           setLoader(false);
-          navigate("/login");
+          navigate("/otpverify");
         }, 2500);
       })
       .catch((error) => {
