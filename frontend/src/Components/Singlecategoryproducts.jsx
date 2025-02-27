@@ -33,7 +33,9 @@ const Singlecategoryproducts = () => {
   return (
     <div className="mt-[50px]">
       <Container>
-      <p className="text-2xl text-primaryColor font-medium font-Nunito mb-3">Categoryname {categoryname.name}</p>
+        <p className="text-2xl text-primaryColor font-medium font-Nunito mb-3">
+          Categoryname {categoryname.name}
+        </p>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
           {allproduct.map((item) => (
             <Categoryproduct key={item._id} products={item} />

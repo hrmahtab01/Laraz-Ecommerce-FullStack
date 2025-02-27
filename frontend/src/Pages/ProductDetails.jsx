@@ -16,7 +16,6 @@ const ProductDetails = () => {
     axios
       .get(`http://localhost:5000/api/v1/product/singleproduct/${id}`)
       .then((result) => {
-        console.log(result);
         setSingleproductdetails(result.data.data);
         setProductImage(result.data.data.image);
       })
@@ -52,7 +51,6 @@ const ProductDetails = () => {
             transition: Slide,
           });
           setTimeout(() => {
-            
             navigate("/cart");
           }, 3000);
         })

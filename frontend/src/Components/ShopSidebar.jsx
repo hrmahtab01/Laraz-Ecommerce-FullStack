@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { categoryinfo } from "../Slices/CategorySilce";
 
 const ShopSidebar = () => {
   const [allcategory, Setallcategory] = useState([]);
   const [allproduct, Setallproduct] = useState([]);
   const [maxvalue, setMaxvalue] = useState();
+  const dispatch = useDispatch();
 
   const fetchallproduct = () => {
     axios
@@ -41,6 +44,10 @@ const ShopSidebar = () => {
       (item) => item.sellingprice >= 0 && item.sellingprice <= maxvalue
     );
     console.log(filtered);
+  };
+
+  const handlecategoryproduct = (id) => {
+    dispatch(categoryinfo(id));
     
   };
   return (
@@ -53,6 +60,7 @@ const ShopSidebar = () => {
           {allcategory.map((item) => (
             <>
               <li
+                onClick={() => handlecategoryproduct(item._id)}
                 key={item._id}
                 className="font-Nunito text-lg text-black font-medium mt-1 cursor-pointer select-none hover:text-primary duration-300"
               >
@@ -66,7 +74,9 @@ const ShopSidebar = () => {
         <h2 className="mb-3 text-xl font-bold font-Nunito text-primary">
           Price Filter
         </h2>
-        <label className="text-gray-600 font-Nunito font-semibold ">Price Range - <span className="text-primary">{maxvalue}</span></label>
+        <label className="text-gray-600 font-Nunito font-semibold ">
+          Price Range - <span className="text-primary">{maxvalue}</span>
+        </label>
         <input
           onChange={HandlefilterPrice}
           className="w-full"

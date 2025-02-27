@@ -10,7 +10,7 @@ async function AddtoorderController(req, res) {
     address,
     city,
     phone,
-    name
+    name,
   } = req.body;
 
   try {
@@ -24,7 +24,7 @@ async function AddtoorderController(req, res) {
         address,
         city,
         phone,
-        name
+        name,
       });
       await order.save();
       return res.status(201).send({
@@ -32,10 +32,9 @@ async function AddtoorderController(req, res) {
         message: "order placed successfully",
         data: order,
       });
-    } else{
-        return res.status(400).send({ success: false, message: "something went wrong" });
+    } else {
+      return res.status(200).send({ message: "online payment " });
     }
-
   } catch (error) {
     return res.status(500).send({ success: false, error: error.message });
   }

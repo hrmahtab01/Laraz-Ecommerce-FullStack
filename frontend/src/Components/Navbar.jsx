@@ -191,7 +191,7 @@ export function EcommerceNavbar() {
         >
           <Bars2Icon className="h-6 w-6" />
         </IconButton>
-        <Link to='/cart'>
+        <Link to="/cart">
           {" "}
           <IoMdCart className="text-3xl font-bold font-Nunito text-primary mr-5 flex items-center cursor-pointer" />
         </Link>
