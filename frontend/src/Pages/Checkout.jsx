@@ -71,6 +71,7 @@ const Checkout = () => {
           theme: "dark",
           transition: Slide,
         });
+
         setTimeout(() => {
           setLoader(false);
         }, 2500);
@@ -236,7 +237,7 @@ const Checkout = () => {
                       onChange={(e) => Setpaymentmethod(e.target.value)}
                       type="radio"
                       name="paymentMethod"
-                      value="Online"
+                      value="online"
                       className="w-[24px] h-[24px]"
                     />
                     <span className="text-base text-primaryColor font-normal font-Nunito">

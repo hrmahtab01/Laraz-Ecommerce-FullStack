@@ -15,6 +15,8 @@ async function AddtoorderController(req, res) {
     city,
     phone,
     name,
+    email,
+    trans_id,
   } = req.body;
 
   try {
@@ -29,6 +31,7 @@ async function AddtoorderController(req, res) {
         city,
         phone,
         name,
+        email,
       });
       await order.save();
       return res.status(201).send({
@@ -37,27 +40,28 @@ async function AddtoorderController(req, res) {
         data: order,
       });
     } else {
+      const transid = Date.now();
       const data = {
         total_amount: 100,
         currency: "BDT",
-        tran_id: "REF123", // use unique tran_id for each api call
-        success_url: "http://localhost:5000/api/v1/order/success",
-        fail_url: "http://localhost:3030/fail",
-        cancel_url: "http://localhost:3030/cancel",
-        ipn_url: "http://localhost:3030/ipn",
+        tran_id: transid,
+        success_url: `http://localhost:5000/api/v1/order/success/${transid}`,
+        fail_url: `http://localhost:5000/api/v1/order/fail/${transid}`,
+        cancel_url: `http://localhost:5000/api/v1/order/cencel/${transid}`,
+        ipn_url: "http://localhost:5000/api/v1/order/ipn",
         shipping_method: "Courier",
         product_name: "Computer.",
         product_category: "Electronic",
         product_profile: "general",
-        cus_name: "Customer Name",
-        cus_email: "customer@example.com",
-        cus_add1: "Dhaka",
+        cus_name: name,
+        cus_email: email,
+        cus_add1: address,
         cus_add2: "Dhaka",
-        cus_city: "Dhaka",
+        cus_city: city,
         cus_state: "Dhaka",
         cus_postcode: "1000",
         cus_country: "Bangladesh",
-        cus_phone: "01711111111",
+        cus_phone: phone,
         cus_fax: "01711111111",
         ship_name: "Customer Name",
         ship_add1: "Dhaka",
@@ -68,8 +72,22 @@ async function AddtoorderController(req, res) {
         ship_country: "Bangladesh",
       };
       const sslcz = new SSLCommerzPayment(store_id, store_passwd, is_live);
-      sslcz.init(data).then((apiResponse) => {
-        // Redirect the user to payment gateway
+      sslcz.init(data).then(async (apiResponse) => {
+        const order = new orderModel({
+          user,
+          cartitem,
+          totalprice,
+          paymentstatus,
+          paymentmethod,
+          address,
+          city,
+          phone,
+          name,
+          email,
+          trans_id: transid,
+        });
+
+        await order.save();
         let GatewayPageURL = apiResponse.GatewayPageURL;
         res.send(GatewayPageURL);
       });
@@ -80,7 +98,43 @@ async function AddtoorderController(req, res) {
 }
 
 async function PaymentsuccessController(req, res) {
-  res.redirect("http://localhost:5173/success");
+  const { id } = req.params;
+  const updateorder = await orderModel
+    .findOneAndUpdate(
+      { trans_id: id },
+      { paymentstatus: "paid" },
+      { new: true }
+    )
+    .then(() => {
+      return res.redirect(`http://localhost:5173/success/${id}`);
+    })
+    .catch((error) => {
+      return res.status(401).send("something went wrong");
+    });
 }
 
-module.exports = { AddtoorderController, PaymentsuccessController };
+async function PaymentfailController(req, res) {
+  const { id } = req.params;
+  const deleteorder = await orderModel
+    .findOneAndDelete({ trans_id: id })
+    .then(() => {
+      res.redirect("http://localhost:5173/paymentfail");
+    });
+}
+
+async function PaymentCencelController(req, res) {
+  const { id } = req.params;
+
+  const deleteorder = await orderModel
+    .findOneAndDelete({ trans_id: id })
+    .then(() => {
+      res.send("Cencel");
+    });
+}
+
+module.exports = {
+  AddtoorderController,
+  PaymentsuccessController,
+  PaymentfailController,
+  PaymentCencelController,
+};

@@ -31,7 +31,7 @@ const orderschema = mongoose.Schema(
     },
     paymentmethod: {
       type: String,
-      enum: ["COD", "card"],
+      enum: ["COD", "online"],
     },
     address: {
       type: String,
@@ -46,6 +46,9 @@ const orderschema = mongoose.Schema(
       required: true,
     },
     email: {
+      type: String,
+    },
+    trans_id: {
       type: String,
     },
   },
