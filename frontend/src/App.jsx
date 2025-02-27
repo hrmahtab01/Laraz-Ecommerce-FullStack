@@ -11,6 +11,8 @@ import Cart from "./Pages/Cart";
 import Checkout from "./Pages/Checkout";
 import Singlecategoryproducts from "./Components/Singlecategoryproducts";
 import OtpVerify from "./Components/OtpVerify";
+import PaymentSuccess from "./Components/PaymentSuccess";
+import Notfound from "./Pages/Notfound";
 
 const App = () => {
   return (
@@ -31,6 +33,8 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/otpverify" element={<OtpVerify />} />
+        <Route path="/success" element={<PaymentSuccess />} />
+        <Route path="*" element={<Notfound />} />
       </Routes>
     </BrowserRouter>
   );

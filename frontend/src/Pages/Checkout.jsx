@@ -58,6 +58,8 @@ const Checkout = () => {
         totalprice: totalPrice,
       })
       .then((result) => {
+        window.location.href = result.data;
+
         toast.success(result?.data?.message || "add to cart successfully", {
           position: "top-left",
           autoClose: 2500,
