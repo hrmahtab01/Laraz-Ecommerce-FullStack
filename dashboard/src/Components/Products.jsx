@@ -88,7 +88,11 @@ const Products = ({ item }) => {
       </tr>
       {productUpdatemodal && (
         <div className="w-full h-screen bg-black/40 absolute top-0 left-0">
-          <Updateproducts item={item} />
+          <h1>corss</h1>
+          <Updateproducts
+            item={item}
+            setProductUpdatemodal={setProductUpdatemodal}
+          />
         </div>
       )}
     </div>

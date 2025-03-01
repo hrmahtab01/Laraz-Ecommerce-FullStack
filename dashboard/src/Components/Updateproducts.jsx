@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 
-const Updateproducts = ({ item }) => {
+const Updateproducts = ({ item, setProductUpdatemodal }) => {
   const [formData, setFormData] = useState({
     productName: "",
     description: "",
@@ -61,12 +61,15 @@ const Updateproducts = ({ item }) => {
         console.log(error);
       });
   };
-
+  const handlecross = () => {
+    setProductUpdatemodal(false);
+  };
   return (
     <div className="py-5 px-7 bg-white shadow-lg rounded-lg z-auto">
       <h1 className="text-2xl font-semibold text-teal-500 text-center">
         Update Product
       </h1>
+
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -181,12 +184,20 @@ const Updateproducts = ({ item }) => {
           />
         </div>
 
-        <button
-          type="submit"
-          className="w-full bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition"
-        >
-          Update Product
-        </button>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <button
+            type="submit"
+            className=" bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600 transition"
+          >
+            Update Product
+          </button>
+          <button
+            className="py-3 px-3 bg-red-500 text-white duration-300 hover:bg-gradient-to-tr rounded-md from-red-800 to-teal-600 "
+            onClick={handlecross}
+          >
+            Cancel{" "}
+          </button>
+        </div>
       </form>
     </div>
   );

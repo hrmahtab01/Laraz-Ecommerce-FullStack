@@ -132,9 +132,26 @@ async function PaymentCencelController(req, res) {
     });
 }
 
+async function GetallorderController(req, res) {
+  try {
+    const allorder = await orderModel.find({});
+    return res
+      .status(200)
+      .send({
+        success: true,
+        message: "get all order successfully",
+        data: allorder,
+      });
+  } catch (error) {
+    return res
+      .status(500)
+      .send({ message: error.message || "something went wrong" });
+  }
+}
 module.exports = {
   AddtoorderController,
   PaymentsuccessController,
   PaymentfailController,
   PaymentCencelController,
+  GetallorderController,
 };
