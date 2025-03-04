@@ -36,7 +36,7 @@ const Products = ({ item }) => {
 
   const classes = "p-4 border-b border-blue-gray-50";
   return (
-    <div>
+    <div className="z-50">
       <tr
         className="lg:flex items-center justify-between gap-4"
         key={item._id || index}
@@ -87,7 +87,7 @@ const Products = ({ item }) => {
         </td>
       </tr>
       {productUpdatemodal && (
-        <div className="w-full h-screen bg-black/40 absolute top-0 left-0">
+        <div className="w-full h-screen z-50 bg-black/40 absolute top-0 left-0 ">
           <h1>corss</h1>
           <Updateproducts
             item={item}
