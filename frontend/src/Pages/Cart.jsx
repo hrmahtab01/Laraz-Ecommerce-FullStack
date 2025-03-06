@@ -80,6 +80,9 @@ const Cart = () => {
   return (
     <div className="pt-2 pb-20">
       <Container>
+        {allcartitem.length >0 ? (
+
+        <>
         <div className="text-sm text-gray-500">
           Home / <span className="text-black">Cart</span>
         </div>
@@ -173,6 +176,12 @@ const Cart = () => {
             </Link>
           </div>
         </div>
+        </>
+        ):(
+          <div className="flex justify-center items-center mt-10 ">
+            <p className="text-2xl font-semibold font-serif text-red-500">Your Cart is Empty</p>
+          </div>
+        )}
       </Container>
     </div>
   );
